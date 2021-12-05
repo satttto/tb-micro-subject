@@ -1,0 +1,23 @@
+# Use postgres/example user/password credentials
+# docker-compose up
+version: '3'
+
+services:
+  db:
+    container_name: subjet_db
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: user
+      POSTGRES_DB: subject
+    ports:
+      - 5433:5432
+
+  adminer:
+    container_name: subjet_adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
