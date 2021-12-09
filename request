@@ -1,0 +1,6 @@
+# 1. 行を選択して、command + shit + p
+# 2. gRPC Client: Sent Requestを選択
+
+
+
+grpcurl -plaintext -d '{"cursor": 1}' localhost:9000 subject.SubjectService.ListSubject

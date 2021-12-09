@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net"
 
@@ -20,29 +19,25 @@ type server struct {
 	pb.UnimplementedSubjectServiceServer
 }
 
-func (s *server) ListSubject(ctx context.Context, in *pb.SubjectListRequest) (*pb.SubjectListResponse, error) {
-	log.Printf("Cursor: %v", in.GetCursor())
-	subjects := []*pb.Subject{
-		{Id: "1", Title: "title1", Members: []*pb.Member{{Id: "m1", Name: "Name"}}},
-		{Id: "2", Title: "title2", Members: []*pb.Member{{Id: "m2", Name: "Name"}}},
-	}
-	return &pb.SubjectListResponse{Subjects: subjects, Size: 12, HasNext: true}, nil
-}
-
 func main() {
 
+	// Connect to DB
 	dsn := "host=127.0.0.1 user=user password=password dbname=subject port=5433 sslmode=disable TimeZone=Asia/Tokyo"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalln("接続失敗", err)
-	} else {
-		log.Println("hey")
+		log.Fatalln("Failed to connect DB")
 	}
 	log.Println(db)
 
+	// DB Migation
+	if err := db.AutoMigrate(&SubjectModel{}); err != nil {
+		log.Fatalln("Failed to migrate DB")
+	}
+
+	// Start server
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatalf("Failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
 	pb.RegisterSubjectServiceServer(s, &server{})
