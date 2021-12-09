@@ -34,7 +34,7 @@ func main() {
 	// Seeding
 	database.Seed(db)
 
-	// Start server
+	// Prep and Serve
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)

@@ -1,20 +1,21 @@
 package service
 
 import (
-	""
+	"context"
+	"log"
+
+	pb "github.com/satttto/tb-proto/subject"
 )
 
+type SubjectService struct{}
 
-type SubjectService struct {}
-
-
-func (s SubjectService) ListSubject(ctx context.Context, in *pb.SubjectListRequest) (*pb.SubjectListResponse, error) {
+func (s *SubjectService) ListSubject(ctx context.Context, in *pb.SubjectListRequest) (*pb.SubjectListResponse, error) {
 	log.Printf("Cursor: %v", in.GetCursor())
 
 	// Retrieve
-	var subjectList []SubjectModel
-	db.Find(&subjectList)
-	log.Println(&subjectList)
+	//var subjectList []SubjectModel
+	//db.Find(&subjectList)
+	//log.Println(&subjectList)
 
 	subjects := []*pb.Subject{
 		{Id: "1", Title: "title1", Members: []*pb.Member{{Id: "m1", Name: "Name"}}},
