@@ -2,9 +2,11 @@ package db
 
 import (
 	"log"
+
+	"gorm.io/gorm"
 )
 
-func MemberFactory() {
+func ExecuteSeeding(db *gorm.DB) {
 	members1 := []MemberModel{
 		{ID: "id1", Name: "Name1"},
 		{ID: "id2", Name: "Name2"},
@@ -19,9 +21,7 @@ func MemberFactory() {
 	if err := db.Create(&members2).Error; err != nil {
 		log.Fatalf("Failed to create members: %v", err)
 	}
-}
 
-func SubjectFactory() {
 	subjects := []SubjectModel{
 		{ID: "sid1", Title: "title1", Members: members1},
 		{ID: "sid2", Title: "title2", Members: members2},

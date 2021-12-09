@@ -11,7 +11,11 @@ func ConnectDB() (*gorm.DB, error) {
 	return db, err
 }
 
-func Migrate(db gorm.DB) error {
+func Migrate(db *gorm.DB) error {
 	err := db.AutoMigrate(&SubjectModel{})
 	return err
+}
+
+func Seed(db *gorm.DB) {
+	ExecuteSeeding(db)
 }

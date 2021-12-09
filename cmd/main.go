@@ -4,11 +4,10 @@ import (
 	"log"
 	"net"
 
+	database "github.com/satttto/tb-micro-subject/db"
 	pb "github.com/satttto/tb-proto/subject"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 )
 
 const (
@@ -22,17 +21,18 @@ type server struct {
 func main() {
 
 	// Connect to DB
-	dsn := "host=127.0.0.1 user=user password=password dbname=subject port=5433 sslmode=disable TimeZone=Asia/Tokyo"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := database.ConnectDB()
 	if err != nil {
 		log.Fatalln("Failed to connect DB")
 	}
-	log.Println(db)
 
 	// DB Migation
-	if err := db.AutoMigrate(&SubjectModel{}); err != nil {
-		log.Fatalln("Failed to migrate DB")
+	if err := database.Migrate(db); err != nil {
+		log.Fatalln("Failed to migrate")
 	}
+
+	// Seeding
+	database.Seed(db)
 
 	// Start server
 	lis, err := net.Listen("tcp", port)
