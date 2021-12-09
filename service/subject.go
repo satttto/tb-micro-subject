@@ -4,10 +4,24 @@ import (
 	"context"
 	"log"
 
+	database "github.com/satttto/tb-micro-subject/db"
 	pb "github.com/satttto/tb-proto/subject"
 )
 
-type SubjectService struct{}
+type Service interface {
+	ListSubject(ctx context.Context, in *pb.SubjectListRequest) (*pb.SubjectListResponse, error)
+}
+
+type SubjectService struct {
+	pb.UnimplementedSubjectServiceServer
+	database database.DB
+}
+
+func InitService(db database.DB) Service {
+	return &SubjectService{
+		database: db,
+	}
+}
 
 func (s *SubjectService) ListSubject(ctx context.Context, in *pb.SubjectListRequest) (*pb.SubjectListResponse, error) {
 	log.Printf("Cursor: %v", in.GetCursor())

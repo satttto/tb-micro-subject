@@ -5,6 +5,7 @@ import (
 	"net"
 
 	database "github.com/satttto/tb-micro-subject/db"
+	service "github.com/satttto/tb-micro-subject/service"
 	pb "github.com/satttto/tb-proto/subject"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -39,8 +40,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
+	subjectService := service.InitService(db)
 	s := grpc.NewServer()
-	pb.RegisterSubjectServiceServer(s, &server{})
+	pb.RegisterSubjectServiceServer(s, subjectService)
 	reflection.Register(s)
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
