@@ -1,9 +1,4 @@
-package db
-
-type MemberModel struct {
-	ID   string `gorm:"primaryKey"`
-	Name string `gorm:"unique;not null"`
-}
+package model
 
 type SubjectModel struct {
 	ID      string        `gorm:"primaryKey"`
